@@ -343,6 +343,9 @@
 /* Time Position */
 "touchbar.time" = "播放進度";
 
+/* Remaining Time Position */
+"touchbar.remainingTime" = "剩餘時間";
+
 /* <None> */
 "track.none" = "<無>";
 
