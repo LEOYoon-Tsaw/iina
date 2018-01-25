@@ -1244,6 +1244,10 @@ class MainWindowController: NSWindowController, NSWindowDelegate {
     isInFullScreenAnimation = false
 
     videoView.videoLayer.mpvGLQueue.resume()
+    
+    if #available(macOS 10.12.2, *) {
+      touchBar?.escapeKeyReplacementItemIdentifier = .exitFullScr
+    }
 
     // we must block the mpv rendering queue to do the following atomically
     videoView.videoLayer.mpvGLQueue.async {
@@ -1300,6 +1304,10 @@ class MainWindowController: NSWindowController, NSWindowDelegate {
   func windowDidExitFullScreen(_ notification: Notification) {
     videoView.videoLayer.mpvGLQueue.resume()
 
+    if #available(macOS 10.12.2, *) {
+      touchBar?.escapeKeyReplacementItemIdentifier = nil
+    }
+    
     videoView.videoLayer.mpvGLQueue.async {
       // reset `keepaspect`
       self.player.mpv.setFlag(MPVOption.Window.keepaspect, false)

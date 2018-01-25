@@ -18,7 +18,7 @@ fileprivate extension NSTouchBar.CustomizationIdentifier {
 }
 
 @available(OSX 10.12.2, *)
-fileprivate extension NSTouchBarItem.Identifier {
+extension NSTouchBarItem.Identifier {
 
   static let playPause = NSTouchBarItem.Identifier("\(Bundle.main.bundleIdentifier!).TouchBarItem.playPause")
   static let slider = NSTouchBarItem.Identifier("\(Bundle.main.bundleIdentifier!).TouchBarItem.slider")
@@ -34,6 +34,7 @@ fileprivate extension NSTouchBarItem.Identifier {
   static let back30Sec = NSTouchBarItem.Identifier("\(Bundle.main.bundleIdentifier!).TouchBarItem.back30Sec")
   static let next = NSTouchBarItem.Identifier("\(Bundle.main.bundleIdentifier!).TouchBarItem.next")
   static let prev = NSTouchBarItem.Identifier("\(Bundle.main.bundleIdentifier!).TouchBarItem.prev")
+  static let exitFullScr = NSTouchBarItem.Identifier("\(Bundle.main.bundleIdentifier!).TouchBarItem.exitFullScr")
 
 }
 
@@ -68,6 +69,7 @@ class TouchBarSupport: NSObject, NSTouchBarDelegate {
 
   weak var touchBarPlaySlider: TouchBarPlaySlider?
   weak var touchBarPlayPauseBtn: NSButton?
+  weak var touchBarExitFullScr: NSButton?
   var touchBarPosLabels: [DurationDisplayTextField] = []
   var touchBarPosLabelWidthLayout: NSLayoutConstraint?
   /** The current/remaining time label in Touch Bar. */
@@ -144,6 +146,13 @@ class TouchBarSupport: NSObject, NSTouchBarDelegate {
       guard let data = touchBarItemBinding[identifier] else { return nil }
       return buttonTouchBarItem(withIdentifier: identifier, imageName: data.0, tag: data.1, customLabel: data.2, action: #selector(self.touchBarSkipAction(_:)))
 
+    case .exitFullScr:
+      let item = NSCustomTouchBarItem(identifier: identifier)
+      item.view = NSButton(image: NSImage(named: .touchBarExitFullScreenTemplate)!, target: self, action: #selector(self.touchBarExitFullScrAction(_:)))
+      item.customizationLabel = NSLocalizedString("touchbar.exit_fullscreen", comment: "Tap to Exit Fullscreen")
+      self.touchBarExitFullScr = item.view as? NSButton
+      return item
+      
     default:
       return nil
     }
@@ -182,6 +191,10 @@ class TouchBarSupport: NSObject, NSTouchBarDelegate {
   @objc func touchBarSliderAction(_ sender: NSSlider) {
     let percentage = 100 * sender.doubleValue / sender.maxValue
     player.seek(percent: percentage, forceExact: true)
+  }
+  
+  @objc func touchBarExitFullScrAction(_ sender: NSButton) {
+    player.mainWindow.toggleWindowFullScreen()
   }
 
   private func buttonTouchBarItem(withIdentifier identifier: NSTouchBarItem.Identifier, imageName: NSImage.Name, tag: Int, customLabel: String, action: Selector) -> NSCustomTouchBarItem {
