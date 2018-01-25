@@ -18,7 +18,7 @@ fileprivate extension NSTouchBar.CustomizationIdentifier {
 }
 
 @available(OSX 10.12.2, *)
-extension NSTouchBarItem.Identifier {
+fileprivate extension NSTouchBarItem.Identifier {
 
   static let playPause = NSTouchBarItem.Identifier("\(Bundle.main.bundleIdentifier!).TouchBarItem.playPause")
   static let slider = NSTouchBarItem.Identifier("\(Bundle.main.bundleIdentifier!).TouchBarItem.slider")
@@ -222,7 +222,14 @@ class TouchBarSupport: NSObject, NSTouchBarDelegate {
         }
       }
     }
-
+  }
+  
+  func toggleTouchBarEsc() {
+    if touchBar.escapeKeyReplacementItemIdentifier == nil {
+      touchBar.escapeKeyReplacementItemIdentifier = .exitFullScr
+    } else {
+      touchBar.escapeKeyReplacementItemIdentifier = nil
+    }
   }
 }
 
