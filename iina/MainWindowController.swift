@@ -1246,7 +1246,7 @@ class MainWindowController: NSWindowController, NSWindowDelegate {
     videoView.videoLayer.mpvGLQueue.resume()
     
     if #available(macOS 10.12.2, *) {
-      player.touchBarSupport.toggleTouchBarEsc()
+      player.touchBarSupport.toggleTouchBarEsc(enteringFullScr: true)
     }
 
     // we must block the mpv rendering queue to do the following atomically
@@ -1305,7 +1305,7 @@ class MainWindowController: NSWindowController, NSWindowDelegate {
     videoView.videoLayer.mpvGLQueue.resume()
 
     if #available(macOS 10.12.2, *) {
-      player.touchBarSupport.toggleTouchBarEsc()
+      player.touchBarSupport.toggleTouchBarEsc(enteringFullScr: false)
     }
     
     videoView.videoLayer.mpvGLQueue.async {

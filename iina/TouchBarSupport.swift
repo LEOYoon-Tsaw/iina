@@ -224,8 +224,8 @@ class TouchBarSupport: NSObject, NSTouchBarDelegate {
     }
   }
   
-  func toggleTouchBarEsc() {
-    if touchBar.escapeKeyReplacementItemIdentifier == nil {
+  func toggleTouchBarEsc(enteringFullScr: Bool) {
+    if enteringFullScr, PlayerCore.keyBindings["ESC"]?.readableAction == "set fullscreen no" {
       touchBar.escapeKeyReplacementItemIdentifier = .exitFullScr
     } else {
       touchBar.escapeKeyReplacementItemIdentifier = nil
